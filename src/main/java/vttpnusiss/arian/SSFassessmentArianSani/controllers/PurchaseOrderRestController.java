@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
-import jakarta.json.JsonArray;
 import jakarta.json.JsonObject;
 import jakarta.json.JsonReader;
 import vttpnusiss.arian.SSFassessmentArianSani.models.Item;
@@ -45,12 +44,6 @@ public class PurchaseOrderRestController {
             JsonReader reader = Json.createReader(is);
             JsonObject o = reader.readObject();
 
-      
-            
-
-            String orderName = o.getString("name");
-            String address = o.getString("address");
-            String email = o.getString("email");
             List<Item> itemsList = new LinkedList<>();
             List<String> itemsQuote = new ArrayList<>();
 
@@ -59,8 +52,6 @@ public class PurchaseOrderRestController {
             custOrder.setAddress(o.getString("address"));
             custOrder.setEmail(o.getString("email"));
             custOrder.setTotalCost(0.00f);
-
-            JsonArray lineItems = o.getJsonArray("lineItems");
 
             o.getJsonArray("lineItems")
                     .stream()
@@ -80,8 +71,6 @@ public class PurchaseOrderRestController {
             }
 
             Quotation returnedQuote = quote.get();
-            List<Float> totalCostList = new LinkedList<>();
-            Float totalCost;
 
             logger.info("This is my items name" + itemsList.get(0).getItemName());
             logger.info("This is my items quantity " + itemsList.get(0).getQuantity().toString());

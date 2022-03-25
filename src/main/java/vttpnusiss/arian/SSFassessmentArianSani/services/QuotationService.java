@@ -4,17 +4,11 @@ import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.MediaType;
-import org.springframework.http.RequestEntity;
+
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.RequestEntity.BodyBuilder;
-import org.springframework.http.RequestEntity.HeadersBuilder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import jakarta.json.Json;
-import jakarta.json.JsonArray;
-import jakarta.json.JsonObject;
-import jakarta.json.JsonValue;
 import vttpnusiss.arian.SSFassessmentArianSani.models.Quotation;
 
 import java.util.Arrays;

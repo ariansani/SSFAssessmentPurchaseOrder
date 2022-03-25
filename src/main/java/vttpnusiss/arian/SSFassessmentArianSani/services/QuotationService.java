@@ -9,10 +9,22 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
+import jakarta.json.Json;
+import jakarta.json.JsonArray;
+import jakarta.json.JsonObject;
+import jakarta.json.JsonReader;
+
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+
 import vttpnusiss.arian.SSFassessmentArianSani.models.Quotation;
 
 import java.util.Arrays;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
@@ -57,7 +69,8 @@ public class QuotationService {
 
         try {
             // do something with this
-            Quotation quote = Quotation.create(resp.getBody());
+            Quotation quote = create(resp.getBody());
+            
             return Optional.of(quote);
 
         } catch (Exception e) {
@@ -66,5 +79,29 @@ public class QuotationService {
         return Optional.empty();
 
     }
+
+    public static Quotation create(String json) throws IOException{
+        
+        Quotation q = new Quotation();
+       
+        try(InputStream is = new ByteArrayInputStream(json.getBytes(StandardCharsets.UTF_8))){
+            JsonReader r = Json.createReader(is);
+            JsonObject o = r.readObject();
+            q.setQuoteId(o.getString("quoteId"));
+            JsonArray arr = o.getJsonArray("quotations");
+            Map<String,Float> mapThis = new HashMap<>(); 
+            arr.stream()
+            .map(v-> (JsonObject)v)
+            .forEach(v -> {
+               logger.info("this is the value of quotation map"+ v.get("unitPrice"));
+               mapThis.put(v.getString("item"), Float.parseFloat(v.get("unitPrice").toString()));
+            });
+            q.setQuotations(mapThis);
+        }
+        
+        return q;
+    }
+
+    
 
 }
